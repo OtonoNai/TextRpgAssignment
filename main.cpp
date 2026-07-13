@@ -48,5 +48,61 @@ int main() {
     cout << endl;
     printStatus(name, stat);
 
+    int hpPotion = 5;
+    int mpPotion = 5;
+
+    cout << "* HP 포션 " << hpPotion << "개, MP 포션 " << mpPotion << "개가 기본 지급되었습니다." << endl;
+    cout << "============================================" << endl;
+    cout << "< 캐릭터 강화 >" << endl;
+    cout << "1. HP UP    2. MP UP    3. 공격력 2배" << endl;
+    cout << "4. 방어력 2배  5. 현재 능력치  0. 게임 시작" << endl;
+    cout << "============================================" << endl;
+
+    bool isGameStart = false;
+    while (!isGameStart) {
+        cout << "번호를 선택해주세요: ";
+        int choice;
+        cin >> choice;
+
+        switch (choice) {
+        case 1:
+            if (hpPotion > 0) {
+                stat[0] += 20;
+                hpPotion--;
+                cout << "* HP가 20 증가했습니다. (HP 포션 차감: 남은 포션 " << hpPotion << "개)" << endl;
+            } else {
+                cout << "* HP 포션이 부족합니다." << endl;
+            }
+            break;
+        case 2:
+            if (mpPotion > 0) {
+                stat[1] += 20;
+                mpPotion--;
+                cout << "* MP가 20 증가했습니다. (MP 포션 차감: 남은 포션 " << mpPotion << "개)" << endl;
+            } else {
+                cout << "* MP 포션이 부족합니다." << endl;
+            }
+            break;
+        case 3:
+            stat[2] *= 2;
+            cout << "* 공격력이 2배가 되었습니다. (현재 공격력: " << stat[2] << ")" << endl;
+            break;
+        case 4:
+            stat[3] *= 2;
+            cout << "* 방어력이 2배가 되었습니다. (현재 방어력: " << stat[3] << ")" << endl;
+            break;
+        case 5:
+            printStatus(name, stat);
+            break;
+        case 0:
+            cout << "게임을 시작합니다!" << endl;
+            isGameStart = true;
+            break;
+        default:
+            cout << "잘못된 선택입니다. 다시 선택해주세요." << endl;
+            break;
+        }
+    }
+
     return 0;
 }
