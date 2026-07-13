@@ -27,10 +27,23 @@ int main() {
     cin >> name;
 
     cout << endl;
-    cout << "HP와 MP를 입력해주세요: ";
-    cin >> stat[0] >> stat[1];
-    cout << "공격력과 방어력을 입력해주세요: ";
-    cin >> stat[2] >> stat[3];
+    while (true) {
+        cout << "HP와 MP를 입력해주세요: ";
+        cin >> stat[0] >> stat[1];
+        if (stat[0] > 50 && stat[1] > 50) {
+            break;
+        }
+        cout << "HP나 MP의 값이 너무 작습니다. 다시 입력해주세요." << endl;
+    }
+
+    while (true) {
+        cout << "공격력과 방어력을 입력해주세요: ";
+        cin >> stat[2] >> stat[3];
+        if (stat[2] > 0 && stat[3] > 0) {
+            break;
+        }
+        cout << "공격력이나 방어력이 너무 작습니다. 다시 입력해주세요." << endl;
+    }
 
     cout << endl;
     printStatus(name, stat);
