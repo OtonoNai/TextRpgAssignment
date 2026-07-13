@@ -1,0 +1,39 @@
+#include <iostream>
+#include <string>
+#include <Windows.h>
+using namespace std;
+
+void printStatus(string name, int stat[]) {
+    cout << "====================================" << endl;
+    cout << "  " << name << " 의 현재 능력치" << endl;
+    cout << "====================================" << endl;
+    cout << "HP: " << stat[0] << "    MP: " << stat[1] << endl;
+    cout << "공격력: " << stat[2] << "    방어력: " << stat[3] << endl;
+    cout << "====================================" << endl;
+}
+
+int main() {
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+
+    const int SIZE = 4;
+    int stat[SIZE] = {0};
+    string name;
+
+    cout << "===========================================" << endl;
+    cout << "   [ 던전 탈출 텍스트 RPG ]" << endl;
+    cout << "===========================================" << endl;
+    cout << "용사의 이름을 입력해주세요: ";
+    cin >> name;
+
+    cout << endl;
+    cout << "HP와 MP를 입력해주세요: ";
+    cin >> stat[0] >> stat[1];
+    cout << "공격력과 방어력을 입력해주세요: ";
+    cin >> stat[2] >> stat[3];
+
+    cout << endl;
+    printStatus(name, stat);
+
+    return 0;
+}
