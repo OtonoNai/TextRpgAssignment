@@ -9,6 +9,7 @@
 #include "Archer.h"
 #include "Monster.h"
 #include "Item.h"
+#include "AlchemyWorkshop.h"
 using namespace std;
 
 void printStatus(string name, int stat[]) {
@@ -193,6 +194,7 @@ int main() {
 
     vector<Item> inventory;
     const int INVENTORY_MAX = 10;
+    AlchemyWorkshop workshop;
 
     bool isPlaying = true;
     while (isPlaying) {
@@ -200,6 +202,7 @@ int main() {
         cout << "=== 메인 메뉴 ===" << endl;
         cout << "1. 던전 입장" << endl;
         cout << "2. 인벤토리 확인" << endl;
+        cout << "3. 포션 제작소" << endl;
         cout << "0. 게임 종료" << endl;
         cout << endl;
         cout << "선택: ";
@@ -223,6 +226,48 @@ int main() {
                 item.PrintInfo();
                 cout << endl;
                 idx++;
+            }
+            break;
+        }
+        case 3: {
+            bool inShop = true;
+            while (inShop) {
+                cout << endl;
+                cout << "=== 포션 제작소 ===" << endl;
+                cout << "1. 전체 레시피 보기" << endl;
+                cout << "2. 포션 이름으로 검색" << endl;
+                cout << "3. 재료로 검색" << endl;
+                cout << "0. 돌아가기" << endl;
+                cout << endl;
+                cout << "선택: ";
+                int shopChoice;
+                cin >> shopChoice;
+
+                switch (shopChoice) {
+                case 1:
+                    workshop.ShowAllRecipes();
+                    break;
+                case 2: {
+                    cout << "검색할 포션 이름: ";
+                    string searchName;
+                    cin >> searchName;
+                    workshop.SearchByName(searchName);
+                    break;
+                }
+                case 3: {
+                    cout << "검색할 재료: ";
+                    string searchIngredient;
+                    cin >> searchIngredient;
+                    workshop.SearchByIngredient(searchIngredient);
+                    break;
+                }
+                case 0:
+                    inShop = false;
+                    break;
+                default:
+                    cout << "잘못된 선택입니다. 다시 선택해주세요." << endl;
+                    break;
+                }
             }
             break;
         }
