@@ -1,6 +1,11 @@
 #include <iostream>
 #include <string>
 #include <Windows.h>
+#include "Player.h"
+#include "Warrior.h"
+#include "Magician.h"
+#include "Thief.h"
+#include "Archer.h"
 using namespace std;
 
 void printStatus(string name, int stat[]) {
@@ -103,6 +108,38 @@ int main() {
             break;
         }
     }
+
+    cout << endl;
+    cout << "< 전직 시스템 >" << endl;
+    cout << name << "님, 직업을 선택해주세요!" << endl;
+    cout << "1. 전사   2. 마법사   3. 도적   4. 궁수" << endl;
+    cout << "선택: ";
+    int jobChoice;
+    cin >> jobChoice;
+
+    Player* player = nullptr;
+    switch (jobChoice) {
+    case 1:
+        player = new Warrior(name, stat[0], stat[1], stat[2], stat[3]);
+        break;
+    case 2:
+        player = new Magician(name, stat[0], stat[1], stat[2], stat[3]);
+        break;
+    case 3:
+        player = new Thief(name, stat[0], stat[1], stat[2], stat[3]);
+        break;
+    case 4:
+        player = new Archer(name, stat[0], stat[1], stat[2], stat[3]);
+        break;
+    default:
+        player = new Warrior(name, stat[0], stat[1], stat[2], stat[3]);
+        break;
+    }
+
+    player->attack();
+    player->printPlayerStatus();
+
+    delete player;
 
     return 0;
 }
