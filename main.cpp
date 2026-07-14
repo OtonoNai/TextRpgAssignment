@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <vector>
 #include <Windows.h>
 #include "Player.h"
 #include "Warrior.h"
@@ -7,6 +8,7 @@
 #include "Thief.h"
 #include "Archer.h"
 #include "Monster.h"
+#include "Item.h"
 using namespace std;
 
 void printStatus(string name, int stat[]) {
@@ -18,7 +20,7 @@ void printStatus(string name, int stat[]) {
     cout << "====================================" << endl;
 }
 
-void battle(Player* player, Monster& monster) {
+void battle(Player* player, Monster& monster, vector<Item>& inventory) {
     cout << endl;
     cout << "[ 전투 시작! ] " << player->getName() << "(" << player->getJob() << ") vs " << monster.getName() << endl;
 
@@ -55,7 +57,13 @@ void battle(Player* player, Monster& monster) {
     if (monster.getHP() <= 0) {
         cout << "★ 전투 승리!" << endl;
         cout << "  -> " << monster.getDropItemName() << " 획득!" << endl;
-        cout << "  (다음 단계에서 인벤토리에 저장됩니다)" << endl;
+
+        Item droppedItem;
+        droppedItem.name = monster.getDropItemName();
+        droppedItem.price = monster.getDropItemPrice();
+        inventory.push_back(droppedItem);
+
+        cout << "  -> 인벤토리에 저장되었습니다." << endl;
     } else {
         cout << "★ 전투 패배..." << endl;
     }
@@ -183,8 +191,50 @@ int main() {
     player->attack();
     player->printPlayerStatus();
 
-    Monster slime("슬라임", 30, 20, 10, "슬라임의 끈적한 젤리", 50);
-    battle(player, slime);
+    vector<Item> inventory;
+    const int INVENTORY_MAX = 10;
+
+    bool isPlaying = true;
+    while (isPlaying) {
+        cout << endl;
+        cout << "=== 메인 메뉴 ===" << endl;
+        cout << "1. 던전 입장" << endl;
+        cout << "2. 인벤토리 확인" << endl;
+        cout << "0. 게임 종료" << endl;
+        cout << endl;
+        cout << "선택: ";
+        int menuChoice;
+        cin >> menuChoice;
+
+        switch (menuChoice) {
+        case 1: {
+            Monster slime("슬라임", 30, 20, 10, "슬라임의 끈적한 젤리", 30);
+            battle(player, slime, inventory);
+            if (player->getHP() <= 0) {
+                isPlaying = false;
+            }
+            break;
+        }
+        case 2: {
+            cout << "[ 인벤토리 (" << inventory.size() << "/" << INVENTORY_MAX << ") ]" << endl;
+            int idx = 1;
+            for (const Item& item : inventory) {
+                cout << idx << ". ";
+                item.PrintInfo();
+                cout << endl;
+                idx++;
+            }
+            break;
+        }
+        case 0:
+            cout << "게임을 종료합니다." << endl;
+            isPlaying = false;
+            break;
+        default:
+            cout << "잘못된 선택입니다. 다시 선택해주세요." << endl;
+            break;
+        }
+    }
 
     delete player;
 
