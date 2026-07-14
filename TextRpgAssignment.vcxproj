@@ -22,6 +22,7 @@
     <ClCompile Include="Archer.cpp" />
     <ClCompile Include="Magician.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Monster.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Thief.cpp" />
     <ClCompile Include="Warrior.cpp" />
@@ -29,6 +30,7 @@
   <ItemGroup>
     <ClInclude Include="Archer.h" />
     <ClInclude Include="Magician.h" />
+    <ClInclude Include="Monster.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Thief.h" />
     <ClInclude Include="Warrior.h" />

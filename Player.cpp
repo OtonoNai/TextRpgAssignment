@@ -15,8 +15,8 @@ void Player::setJob(string job) { this->job = job; }
 int Player::getLevel() const { return level; }
 void Player::setLevel(int level) { this->level = level; }
 
-int Player::getHp() const { return hp; }
-void Player::setHp(int hp) { this->hp = hp; }
+int Player::getHP() const { return hp; }
+void Player::setHP(int hp) { this->hp = hp; }
 
 int Player::getMp() const { return mp; }
 void Player::setMp(int mp) { this->mp = mp; }

@@ -6,6 +6,7 @@
 #include "Magician.h"
 #include "Thief.h"
 #include "Archer.h"
+#include "Monster.h"
 using namespace std;
 
 void printStatus(string name, int stat[]) {
@@ -15,6 +16,49 @@ void printStatus(string name, int stat[]) {
     cout << "HP: " << stat[0] << "    MP: " << stat[1] << endl;
     cout << "공격력: " << stat[2] << "    방어력: " << stat[3] << endl;
     cout << "====================================" << endl;
+}
+
+void battle(Player* player, Monster& monster) {
+    cout << endl;
+    cout << "[ 전투 시작! ] " << player->getName() << "(" << player->getJob() << ") vs " << monster.getName() << endl;
+
+    while (player->getHP() > 0 && monster.getHP() > 0) {
+        cout << endl;
+        cout << "--- 플레이어 턴 ---" << endl;
+        player->attack();
+
+        int damage = player->getPower() - monster.getDefence();
+        if (damage <= 0) {
+            damage = 1;
+        }
+
+        int beforeHp = monster.getHP();
+        monster.setHP(monster.getHP() - damage);
+
+        cout << monster.getName() << "에게 " << damage << " 데미지!" << endl;
+        cout << monster.getName() << " HP: " << beforeHp << " -> " << monster.getHP();
+        if (monster.getHP() <= 0) {
+            cout << " (사망)" << endl;
+            break;
+        }
+        cout << endl;
+
+        cout << endl;
+        cout << "--- 몬스터 턴 ---" << endl;
+        monster.attack(player);
+        if (player->getHP() <= 0) {
+            break;
+        }
+    }
+
+    cout << endl;
+    if (monster.getHP() <= 0) {
+        cout << "★ 전투 승리!" << endl;
+        cout << "  -> " << monster.getDropItemName() << " 획득!" << endl;
+        cout << "  (다음 단계에서 인벤토리에 저장됩니다)" << endl;
+    } else {
+        cout << "★ 전투 패배..." << endl;
+    }
 }
 
 int main() {
@@ -138,6 +182,9 @@ int main() {
 
     player->attack();
     player->printPlayerStatus();
+
+    Monster slime("슬라임", 30, 20, 10, "슬라임의 끈적한 젤리", 50);
+    battle(player, slime);
 
     delete player;
 

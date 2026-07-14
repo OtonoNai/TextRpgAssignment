@@ -25,8 +25,8 @@ public:
     int getLevel() const;
     void setLevel(int level);
 
-    int getHp() const;
-    void setHp(int hp);
+    int getHP() const;
+    void setHP(int hp);
 
     int getMp() const;
     void setMp(int mp);
