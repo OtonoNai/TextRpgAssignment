@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cstdlib>
+#include <ctime>
 #include <Windows.h>
 #include "Player.h"
 #include "Warrior.h"
@@ -73,6 +75,7 @@ void battle(Player* player, Monster& monster, vector<Item>& inventory) {
 int main() {
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
+    srand(static_cast<unsigned int>(time(nullptr)));
 
     const int SIZE = 4;
     int stat[SIZE] = {0};
@@ -211,8 +214,14 @@ int main() {
 
         switch (menuChoice) {
         case 1: {
-            Monster slime("슬라임", 30, 20, 10, "슬라임의 끈적한 젤리", 30);
-            battle(player, slime, inventory);
+            int monsterType = rand() % 2;
+            if (monsterType == 0) {
+                Monster monster("슬라임", 30, 20, 10, "슬라임의 끈적한 젤리", 30);
+                battle(player, monster, inventory);
+            } else {
+                Monster monster("고블린", 40, 15, 5, "고블린의 이빨", 20);
+                battle(player, monster, inventory);
+            }
             if (player->getHP() <= 0) {
                 isPlaying = false;
             }
