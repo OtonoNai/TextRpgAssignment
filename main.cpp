@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <vector>
 #include <algorithm>
 #include <cstdlib>
 #include <ctime>
@@ -12,6 +11,7 @@
 #include "Archer.h"
 #include "Monster.h"
 #include "Item.h"
+#include "Inventory.h"
 #include "AlchemyWorkshop.h"
 using namespace std;
 
@@ -29,27 +29,7 @@ void setPotion(int count, int* p_HPPotion, int* p_MPPotion) {
     *p_MPPotion = count;
 }
 
-int countItem(const vector<Item>& inventory, const string& itemName) {
-    int count = 0;
-    for (const Item& item : inventory) {
-        if (item.name == itemName) {
-            count++;
-        }
-    }
-    return count;
-}
-
-bool removeItemByName(vector<Item>& inventory, const string& itemName) {
-    for (size_t i = 0; i < inventory.size(); i++) {
-        if (inventory[i].name == itemName) {
-            inventory.erase(inventory.begin() + i);
-            return true;
-        }
-    }
-    return false;
-}
-
-void battle(Player* player, Monster& monster, vector<Item>& inventory) {
+void battle(Player* player, Monster& monster, Inventory<Item>& inventory) {
     cout << endl;
     cout << "[ 전투 시작! ] " << player->getName() << "(" << player->getJob() << ") vs " << monster.getName() << endl;
 
@@ -64,30 +44,28 @@ void battle(Player* player, Monster& monster, vector<Item>& inventory) {
 
         if (turnChoice == 2) {
             cout << "[ 인벤토리 ]" << endl;
-            int idx = 1;
-            for (const Item& item : inventory) {
-                cout << idx << ". ";
-                item.PrintInfo();
+            for (int i = 0; i < inventory.GetSize(); i++) {
+                cout << (i + 1) << ". ";
+                inventory[i].PrintInfo();
                 cout << endl;
-                idx++;
             }
             cout << "사용할 아이템 번호: ";
             int itemChoice;
             cin >> itemChoice;
 
-            if (itemChoice >= 1 && itemChoice <= static_cast<int>(inventory.size())) {
+            if (itemChoice >= 1 && itemChoice <= inventory.GetSize()) {
                 Item usedItem = inventory[itemChoice - 1];
 
                 if (usedItem.name == "HP 포션") {
                     int beforeHeal = player->getHP();
                     player->setHP(min(player->getHP() + 50, player->getMaxHP()));
                     cout << "* HP 포션 사용! HP 50 회복 (" << beforeHeal << " -> " << player->getHP() << ")" << endl;
-                    inventory.erase(inventory.begin() + (itemChoice - 1));
+                    inventory.RemoveItemAt(itemChoice - 1);
                 } else if (usedItem.name == "MP 포션") {
                     int beforeHeal = player->getMp();
                     player->setMp(min(player->getMp() + 50, player->getMaxMP()));
                     cout << "* MP 포션 사용! MP 50 회복 (" << beforeHeal << " -> " << player->getMp() << ")" << endl;
-                    inventory.erase(inventory.begin() + (itemChoice - 1));
+                    inventory.RemoveItemAt(itemChoice - 1);
                 } else {
                     cout << "* 전투 중에는 사용할 수 없는 아이템입니다." << endl;
                 }
@@ -122,9 +100,12 @@ void battle(Player* player, Monster& monster, vector<Item>& inventory) {
         Item droppedItem;
         droppedItem.name = monster.getDropItemName();
         droppedItem.price = monster.getDropItemPrice();
-        inventory.push_back(droppedItem);
 
-        cout << "  -> 인벤토리에 저장되었습니다." << endl;
+        if (inventory.AddItem(droppedItem)) {
+            cout << "  -> 인벤토리에 저장되었습니다." << endl;
+        } else {
+            cout << "  -> 인벤토리가 가득 차서 아이템을 저장하지 못했습니다." << endl;
+        }
 
         int expGain = monster.getExpReward();
         player->setExp(player->getExp() + expGain);
@@ -275,15 +256,15 @@ int main() {
 
     player->printPlayerStatus();
 
-    vector<Item> inventory;
     const int INVENTORY_MAX = 10;
+    Inventory<Item> inventory(INVENTORY_MAX);
     AlchemyWorkshop workshop;
 
     for (int i = 0; i < 3; i++) {
-        inventory.push_back({ "HP 포션", 50 });
+        inventory.AddItem({ "HP 포션", 50 });
     }
     for (int i = 0; i < 3; i++) {
-        inventory.push_back({ "MP 포션", 50 });
+        inventory.AddItem({ "MP 포션", 50 });
     }
 
     bool isPlaying = true;
@@ -315,14 +296,7 @@ int main() {
             break;
         }
         case 2: {
-            cout << "[ 인벤토리 (" << inventory.size() << "/" << INVENTORY_MAX << ") ]" << endl;
-            int idx = 1;
-            for (const Item& item : inventory) {
-                cout << idx << ". ";
-                item.PrintInfo();
-                cout << endl;
-                idx++;
-            }
+            inventory.PrintAllItems();
             break;
         }
         case 3: {
