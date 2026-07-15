@@ -23,6 +23,11 @@ void printStatus(string name, int stat[]) {
     cout << "====================================" << endl;
 }
 
+void setPotion(int count, int* p_HPPotion, int* p_MPPotion) {
+    *p_HPPotion = count;
+    *p_MPPotion = count;
+}
+
 void battle(Player* player, Monster& monster, vector<Item>& inventory) {
     cout << endl;
     cout << "[ 전투 시작! ] " << player->getName() << "(" << player->getJob() << ") vs " << monster.getName() << endl;
@@ -109,8 +114,9 @@ int main() {
     cout << endl;
     printStatus(name, stat);
 
-    int hpPotion = 5;
-    int mpPotion = 5;
+    int hpPotion = 0;
+    int mpPotion = 0;
+    setPotion(5, &hpPotion, &mpPotion);
 
     cout << "* HP 포션 " << hpPotion << "개, MP 포션 " << mpPotion << "개가 기본 지급되었습니다." << endl;
     cout << "============================================" << endl;
