@@ -7,6 +7,8 @@ protected:
     string name;
     string job;
     int level;
+    int exp;
+    int maxExp;
     int hp;
     int mp;
     int power;
@@ -24,6 +26,12 @@ public:
 
     int getLevel() const;
     void setLevel(int level);
+
+    int getExp() const;
+    void setExp(int exp);
+
+    int getMaxExp() const;
+    void setMaxExp(int maxExp);
 
     int getHP() const;
     void setHP(int hp);

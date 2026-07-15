@@ -72,6 +72,26 @@ void battle(Player* player, Monster& monster, vector<Item>& inventory) {
         inventory.push_back(droppedItem);
 
         cout << "  -> 인벤토리에 저장되었습니다." << endl;
+
+        int expGain = monster.getExpReward();
+        player->setExp(player->getExp() + expGain);
+        cout << "  -> 경험치 +" << expGain << " 획득! (현재 경험치: " << player->getExp() << "/" << player->getMaxExp() << ")" << endl;
+
+        while (player->getExp() >= player->getMaxExp()) {
+            int oldLevel = player->getLevel();
+            int overflowExp = player->getExp() - player->getMaxExp();
+
+            player->setLevel(oldLevel + 1);
+            player->setExp(overflowExp);
+            player->setMaxExp(player->getMaxExp() + 50);
+
+            player->setHP(player->getHP() + 10);
+            player->setMp(player->getMp() + 5);
+            player->setPower(player->getPower() + 5);
+
+            cout << "  -> 레벨 업! Lv." << oldLevel << " -> Lv." << player->getLevel() << endl;
+            cout << "  -> HP +10, MP +5, 공격력 +5 증가!" << endl;
+        }
     } else {
         cout << "★ 전투 패배..." << endl;
     }
@@ -222,10 +242,10 @@ int main() {
         case 1: {
             int monsterType = rand() % 2;
             if (monsterType == 0) {
-                Monster monster("슬라임", 30, 20, 10, "슬라임의 끈적한 젤리", 30);
+                Monster monster("슬라임", 30, 20, 10, "슬라임의 끈적한 젤리", 30, 30);
                 battle(player, monster, inventory);
             } else {
-                Monster monster("고블린", 40, 15, 5, "고블린의 이빨", 20);
+                Monster monster("고블린", 40, 15, 5, "고블린의 이빨", 20, 40);
                 battle(player, monster, inventory);
             }
             if (player->getHP() <= 0) {

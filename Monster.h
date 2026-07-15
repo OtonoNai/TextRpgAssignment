@@ -11,9 +11,10 @@ private:
     int defence;
     string dropItemName;
     int dropItemPrice;
+    int expReward;
 
 public:
-    Monster(string name, int hp, int power, int defence, string dropItemName, int dropItemPrice);
+    Monster(string name, int hp, int power, int defence, string dropItemName, int dropItemPrice, int expReward);
 
     string getName() const;
 
@@ -25,6 +26,7 @@ public:
 
     string getDropItemName() const;
     int getDropItemPrice() const;
+    int getExpReward() const;
 
     void attack(Player* player);
 };

@@ -2,9 +2,9 @@
 #include <iostream>
 using namespace std;
 
-Monster::Monster(string name, int hp, int power, int defence, string dropItemName, int dropItemPrice)
+Monster::Monster(string name, int hp, int power, int defence, string dropItemName, int dropItemPrice, int expReward)
     : name(name), hp(hp), power(power), defence(defence),
-      dropItemName(dropItemName), dropItemPrice(dropItemPrice) {
+      dropItemName(dropItemName), dropItemPrice(dropItemPrice), expReward(expReward) {
 }
 
 string Monster::getName() const { return name; }
@@ -17,6 +17,7 @@ int Monster::getDefence() const { return defence; }
 
 string Monster::getDropItemName() const { return dropItemName; }
 int Monster::getDropItemPrice() const { return dropItemPrice; }
+int Monster::getExpReward() const { return expReward; }
 
 void Monster::attack(Player* player) {
     int damage = power - player->getDefence();

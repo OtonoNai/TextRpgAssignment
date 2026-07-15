@@ -3,7 +3,7 @@
 using namespace std;
 
 Player::Player(string name, int hp, int mp, int power, int defence)
-    : name(name), job(""), level(1), hp(hp), mp(mp), power(power), defence(defence) {
+    : name(name), job(""), level(1), exp(0), maxExp(100), hp(hp), mp(mp), power(power), defence(defence) {
 }
 
 string Player::getName() const { return name; }
@@ -14,6 +14,12 @@ void Player::setJob(string job) { this->job = job; }
 
 int Player::getLevel() const { return level; }
 void Player::setLevel(int level) { this->level = level; }
+
+int Player::getExp() const { return exp; }
+void Player::setExp(int exp) { this->exp = exp; }
+
+int Player::getMaxExp() const { return maxExp; }
+void Player::setMaxExp(int maxExp) { this->maxExp = maxExp; }
 
 int Player::getHP() const { return hp; }
 void Player::setHP(int hp) { this->hp = hp; }
@@ -29,7 +35,7 @@ void Player::setDefence(int defence) { this->defence = defence; }
 
 void Player::printPlayerStatus() {
     cout << "------------------------------------" << endl;
-    cout << "닉네임: " << name << " | 직업: " << job << " | Lv." << level << endl;
+    cout << "닉네임: " << name << " | 직업: " << job << " | Lv." << level << " | EXP: " << exp << "/" << maxExp << endl;
     cout << "HP: " << hp << " | MP: " << mp << " | 공격력: " << power << " | 방어력: " << defence << endl;
     cout << "------------------------------------" << endl;
 }
