@@ -1,4 +1,5 @@
 #include "Warrior.h"
+#include "Monster.h"
 #include <iostream>
 using namespace std;
 
@@ -9,6 +10,12 @@ Warrior::Warrior(string name, int hp, int mp, int power, int defence)
     cout << "* 전사로 전직하였습니다. (HP +30)" << endl;
 }
 
-void Warrior::attack() {
-    cout << "* 강력한 일격을 날린다!" << endl;
+void Warrior::attack(Monster* monster) {
+    int damage = getPower() - monster->getDefence();
+    if (damage <= 0) {
+        damage = 1;
+    }
+
+    monster->setHP(monster->getHP() - damage);
+    cout << "[전사] 장검을 휘두른다! -> " << monster->getName() << "에게 " << damage << " 데미지!" << endl;
 }

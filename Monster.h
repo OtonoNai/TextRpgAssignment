@@ -1,7 +1,8 @@
 #pragma once
 #include <string>
-#include "Player.h"
 using namespace std;
+
+class Player;
 
 class Monster {
 private:

@@ -2,6 +2,8 @@
 #include <string>
 using namespace std;
 
+class Monster;
+
 class Player {
 protected:
     string name;
@@ -47,5 +49,5 @@ public:
 
     void printPlayerStatus();
 
-    virtual void attack() = 0;
+    virtual void attack(Monster* monster) = 0;
 };

@@ -35,17 +35,10 @@ void battle(Player* player, Monster& monster, vector<Item>& inventory) {
     while (player->getHP() > 0 && monster.getHP() > 0) {
         cout << endl;
         cout << "--- 플레이어 턴 ---" << endl;
-        player->attack();
-
-        int damage = player->getPower() - monster.getDefence();
-        if (damage <= 0) {
-            damage = 1;
-        }
 
         int beforeHp = monster.getHP();
-        monster.setHP(monster.getHP() - damage);
+        player->attack(&monster);
 
-        cout << monster.getName() << "에게 " << damage << " 데미지!" << endl;
         cout << monster.getName() << " HP: " << beforeHp << " -> " << monster.getHP();
         if (monster.getHP() <= 0) {
             cout << " (사망)" << endl;
@@ -218,7 +211,6 @@ int main() {
         break;
     }
 
-    player->attack();
     player->printPlayerStatus();
 
     vector<Item> inventory;
