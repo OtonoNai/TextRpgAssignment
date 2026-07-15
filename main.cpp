@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <vector>
 #include <algorithm>
 #include <cstdlib>
 #include <ctime>
@@ -128,6 +129,64 @@ void battle(Player* player, Monster& monster, Inventory<Item>& inventory) {
     } else {
         cout << "★ 전투 패배..." << endl;
     }
+}
+
+void bossDungeon(Player* player, Inventory<Item>& inventory) {
+    struct RoomInfo {
+        string name;
+        int hp;
+        int power;
+        int defence;
+        string dropItemName;
+        int dropItemPrice;
+        int expReward;
+    };
+
+    vector<RoomInfo> rooms = {
+        { "슬라임", 30, 15, 10, "슬라임의 끈적한 젤리", 30, 30 },
+        { "고블린", 50, 25, 15, "고블린의 이빨", 20, 40 },
+        { "오크", 80, 35, 18, "오크의 어금니", 40, 60 }
+    };
+
+    cout << endl;
+    cout << "[ 던전 1층 ]" << endl;
+
+    for (size_t i = 0; i < rooms.size(); i++) {
+        cout << endl;
+        cout << (i + 1) << "번 방: " << rooms[i].name
+             << " (HP " << rooms[i].hp << ", 공격력 " << rooms[i].power << ")" << endl;
+
+        Monster monster(rooms[i].name, rooms[i].hp, rooms[i].power, rooms[i].defence,
+                         rooms[i].dropItemName, rooms[i].dropItemPrice, rooms[i].expReward);
+        battle(player, monster, inventory);
+
+        if (player->getHP() <= 0) {
+            cout << endl;
+            cout << "=== 게임 오버! ===" << endl;
+            return;
+        }
+
+        cout << "-> " << (i + 1) << "번 방 클리어!" << endl;
+    }
+
+    cout << endl;
+    cout << "★ 보스방 개방!" << endl;
+
+    Monster boss("드래곤", 200, 60, 20, "드래곤의 비늘", 500, 300);
+    cout << "보스 " << boss.getName() << " 등장! (HP " << boss.getHP()
+         << ", 공격력 " << boss.getPower() << ", 방어력 " << boss.getDefence() << ")" << endl;
+
+    battle(player, boss, inventory);
+
+    if (player->getHP() <= 0) {
+        cout << endl;
+        cout << "=== 게임 오버! ===" << endl;
+        return;
+    }
+
+    cout << endl;
+    cout << boss.getName() << "을(를) 처치했습니다!" << endl;
+    cout << "=== 게임 클리어! ===" << endl;
 }
 
 int main() {
@@ -272,6 +331,7 @@ int main() {
         cout << "2. 인벤토리 확인" << endl;
         cout << "3. 포션 제작소" << endl;
         cout << "4. 인벤토리 정렬(가격순)" << endl;
+        cout << "5. 보스 던전 도전" << endl;
         cout << "0. 게임 종료" << endl;
         cout << endl;
         cout << "선택: ";
@@ -364,6 +424,11 @@ int main() {
                 inventory[i].PrintInfo();
                 cout << endl;
             }
+            break;
+        }
+        case 5: {
+            bossDungeon(player, inventory);
+            isPlaying = false;
             break;
         }
         case 0:
