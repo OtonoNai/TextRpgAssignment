@@ -11,3 +11,7 @@ struct Item {
         cout << name << " (" << price << "G)";
     }
 };
+
+inline bool compareByPrice(const Item& a, const Item& b) {
+    return a.price < b.price;
+}

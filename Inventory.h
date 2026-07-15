@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <algorithm>
 using namespace std;
 
 template<typename T>
@@ -44,9 +45,22 @@ public:
         delete[] pItems_;
     }
 
+    void Resize(int newCapacity) {
+        T* newItems = new T[newCapacity]();
+        for (int i = 0; i < size_; i++) {
+            newItems[i] = pItems_[i];
+        }
+        delete[] pItems_;
+        pItems_ = newItems;
+        capacity_ = newCapacity;
+    }
+
     bool AddItem(const T& item) {
         if (size_ >= capacity_) {
-            return false;
+            int oldCapacity = capacity_;
+            int newCapacity = (capacity_ == 0) ? 1 : capacity_ * 2;
+            Resize(newCapacity);
+            cout << "-> 인벤토리 자동 확장! (" << oldCapacity << " -> " << newCapacity << ")" << endl;
         }
         pItems_[size_] = item;
         size_++;
@@ -90,5 +104,10 @@ public:
         }
         size_--;
         return true;
+    }
+
+    template<typename Compare>
+    void SortItems(Compare compareFunc) {
+        std::sort(pItems_, pItems_ + size_, compareFunc);
     }
 };

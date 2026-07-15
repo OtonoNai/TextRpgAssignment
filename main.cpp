@@ -100,12 +100,9 @@ void battle(Player* player, Monster& monster, Inventory<Item>& inventory) {
         Item droppedItem;
         droppedItem.name = monster.getDropItemName();
         droppedItem.price = monster.getDropItemPrice();
+        inventory.AddItem(droppedItem);
 
-        if (inventory.AddItem(droppedItem)) {
-            cout << "  -> 인벤토리에 저장되었습니다." << endl;
-        } else {
-            cout << "  -> 인벤토리가 가득 차서 아이템을 저장하지 못했습니다." << endl;
-        }
+        cout << "  -> 인벤토리에 저장되었습니다." << endl;
 
         int expGain = monster.getExpReward();
         player->setExp(player->getExp() + expGain);
@@ -274,6 +271,7 @@ int main() {
         cout << "1. 던전 입장" << endl;
         cout << "2. 인벤토리 확인" << endl;
         cout << "3. 포션 제작소" << endl;
+        cout << "4. 인벤토리 정렬(가격순)" << endl;
         cout << "0. 게임 종료" << endl;
         cout << endl;
         cout << "선택: ";
@@ -338,6 +336,16 @@ int main() {
                     cout << "잘못된 선택입니다. 다시 선택해주세요." << endl;
                     break;
                 }
+            }
+            break;
+        }
+        case 4: {
+            inventory.SortItems(compareByPrice);
+            cout << "[ 가격순 정렬 후 인벤토리 ]" << endl;
+            for (int i = 0; i < inventory.GetSize(); i++) {
+                cout << (i + 1) << ". ";
+                inventory[i].PrintInfo();
+                cout << endl;
             }
             break;
         }
