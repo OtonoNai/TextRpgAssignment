@@ -305,6 +305,8 @@ int main() {
                 cout << "1. 전체 레시피 보기" << endl;
                 cout << "2. 포션 이름으로 검색" << endl;
                 cout << "3. 재료로 검색" << endl;
+                cout << "4. 포션 지급받기" << endl;
+                cout << "5. 공병 반환하기" << endl;
                 cout << "0. 돌아가기" << endl;
                 cout << endl;
                 cout << "선택: ";
@@ -327,6 +329,21 @@ int main() {
                     string searchIngredient;
                     cin >> searchIngredient;
                     workshop.SearchByIngredient(searchIngredient);
+                    break;
+                }
+                case 4: {
+                    cout << "지급받을 포션 이름: ";
+                    string potionName;
+                    cin >> potionName;
+                    cout << potionName << " 재고: " << workshop.GetStock(potionName) << endl;
+                    workshop.DispensePotion(potionName);
+                    break;
+                }
+                case 5: {
+                    cout << "반환할 포션 이름: ";
+                    string potionName;
+                    cin >> potionName;
+                    workshop.ReturnPotion(potionName);
                     break;
                 }
                 case 0:

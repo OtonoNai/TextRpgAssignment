@@ -5,6 +5,10 @@ using namespace std;
 AlchemyWorkshop::AlchemyWorkshop() {
     recipes.push_back({ "HP포션", { {"허브", 1}, {"맑은물", 1} } });
     recipes.push_back({ "스태미나포션", { {"허브", 1}, {"베리", 1} } });
+
+    for (const PotionRecipe& recipe : recipes) {
+        potionStock_[recipe.name] = MAX_STOCK;
+    }
 }
 
 void AlchemyWorkshop::ShowAllRecipes() const {
@@ -41,4 +45,42 @@ void AlchemyWorkshop::SearchByIngredient(string ingredient) const {
         }
     }
     cout << "총 " << foundCount << "개의 레시피를 찾았습니다." << endl;
+}
+
+void AlchemyWorkshop::DispensePotion(const string& name) {
+    if (potionStock_.find(name) == potionStock_.end()) {
+        cout << "-> 존재하지 않는 포션입니다." << endl;
+        return;
+    }
+
+    if (potionStock_[name] <= 0) {
+        cout << "-> " << name << " 지급 실패: 재고 없음!" << endl;
+        return;
+    }
+
+    potionStock_[name]--;
+    cout << "-> " << name << " 지급 (재고: " << potionStock_[name] << ")" << endl;
+}
+
+void AlchemyWorkshop::ReturnPotion(const string& name) {
+    if (potionStock_.find(name) == potionStock_.end()) {
+        cout << "-> 존재하지 않는 포션입니다." << endl;
+        return;
+    }
+
+    if (potionStock_[name] >= MAX_STOCK) {
+        cout << "-> 재고가 이미 가득 찼습니다. (재고: " << potionStock_[name] << ")" << endl;
+        return;
+    }
+
+    potionStock_[name]++;
+    cout << "-> 공병 반환 (재고: " << potionStock_[name] << ")" << endl;
+}
+
+int AlchemyWorkshop::GetStock(const string& name) const {
+    auto it = potionStock_.find(name);
+    if (it == potionStock_.end()) {
+        return 0;
+    }
+    return it->second;
 }
