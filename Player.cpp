@@ -3,7 +3,8 @@
 using namespace std;
 
 Player::Player(string name, int hp, int mp, int power, int defence)
-    : name(name), job(""), level(1), exp(0), maxExp(100), hp(hp), mp(mp), power(power), defence(defence) {
+    : name(name), job(""), level(1), exp(0), maxExp(100),
+      hp(hp), maxHp(hp), mp(mp), maxMp(mp), power(power), defence(defence) {
 }
 
 string Player::getName() const { return name; }
@@ -24,8 +25,14 @@ void Player::setMaxExp(int maxExp) { this->maxExp = maxExp; }
 int Player::getHP() const { return hp; }
 void Player::setHP(int hp) { this->hp = hp; }
 
+int Player::getMaxHP() const { return maxHp; }
+void Player::setMaxHP(int maxHp) { this->maxHp = maxHp; }
+
 int Player::getMp() const { return mp; }
 void Player::setMp(int mp) { this->mp = mp; }
+
+int Player::getMaxMP() const { return maxMp; }
+void Player::setMaxMP(int maxMp) { this->maxMp = maxMp; }
 
 int Player::getPower() const { return power; }
 void Player::setPower(int power) { this->power = power; }

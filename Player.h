@@ -12,7 +12,9 @@ protected:
     int exp;
     int maxExp;
     int hp;
+    int maxHp;
     int mp;
+    int maxMp;
     int power;
     int defence;
 
@@ -38,8 +40,14 @@ public:
     int getHP() const;
     void setHP(int hp);
 
+    int getMaxHP() const;
+    void setMaxHP(int maxHp);
+
     int getMp() const;
     void setMp(int mp);
+
+    int getMaxMP() const;
+    void setMaxMP(int maxMp);
 
     int getPower() const;
     void setPower(int power);

@@ -7,6 +7,7 @@ Magician::Magician(string name, int hp, int mp, int power, int defence)
     : Player(name, hp, mp, power, defence) {
     setJob("마법사");
     setMp(getMp() + 30);
+    setMaxMP(getMaxMP() + 30);
     cout << "* 마법사로 전직하였습니다. (MP +30)" << endl;
 }
 

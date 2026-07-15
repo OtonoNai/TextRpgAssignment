@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
 #include <cstdlib>
 #include <ctime>
 #include <Windows.h>
@@ -28,6 +29,26 @@ void setPotion(int count, int* p_HPPotion, int* p_MPPotion) {
     *p_MPPotion = count;
 }
 
+int countItem(const vector<Item>& inventory, const string& itemName) {
+    int count = 0;
+    for (const Item& item : inventory) {
+        if (item.name == itemName) {
+            count++;
+        }
+    }
+    return count;
+}
+
+bool removeItemByName(vector<Item>& inventory, const string& itemName) {
+    for (size_t i = 0; i < inventory.size(); i++) {
+        if (inventory[i].name == itemName) {
+            inventory.erase(inventory.begin() + i);
+            return true;
+        }
+    }
+    return false;
+}
+
 void battle(Player* player, Monster& monster, vector<Item>& inventory) {
     cout << endl;
     cout << "[ 전투 시작! ] " << player->getName() << "(" << player->getJob() << ") vs " << monster.getName() << endl;
@@ -35,16 +56,55 @@ void battle(Player* player, Monster& monster, vector<Item>& inventory) {
     while (player->getHP() > 0 && monster.getHP() > 0) {
         cout << endl;
         cout << "--- 플레이어 턴 ---" << endl;
+        cout << "1. 공격" << endl;
+        cout << "2. 아이템 사용" << endl;
+        cout << "선택: ";
+        int turnChoice;
+        cin >> turnChoice;
 
-        int beforeHp = monster.getHP();
-        player->attack(&monster);
+        if (turnChoice == 2) {
+            cout << "[ 인벤토리 ]" << endl;
+            int idx = 1;
+            for (const Item& item : inventory) {
+                cout << idx << ". ";
+                item.PrintInfo();
+                cout << endl;
+                idx++;
+            }
+            cout << "사용할 아이템 번호: ";
+            int itemChoice;
+            cin >> itemChoice;
 
-        cout << monster.getName() << " HP: " << beforeHp << " -> " << monster.getHP();
-        if (monster.getHP() <= 0) {
-            cout << " (사망)" << endl;
-            break;
+            if (itemChoice >= 1 && itemChoice <= static_cast<int>(inventory.size())) {
+                Item usedItem = inventory[itemChoice - 1];
+
+                if (usedItem.name == "HP 포션") {
+                    int beforeHeal = player->getHP();
+                    player->setHP(min(player->getHP() + 50, player->getMaxHP()));
+                    cout << "* HP 포션 사용! HP 50 회복 (" << beforeHeal << " -> " << player->getHP() << ")" << endl;
+                    inventory.erase(inventory.begin() + (itemChoice - 1));
+                } else if (usedItem.name == "MP 포션") {
+                    int beforeHeal = player->getMp();
+                    player->setMp(min(player->getMp() + 50, player->getMaxMP()));
+                    cout << "* MP 포션 사용! MP 50 회복 (" << beforeHeal << " -> " << player->getMp() << ")" << endl;
+                    inventory.erase(inventory.begin() + (itemChoice - 1));
+                } else {
+                    cout << "* 전투 중에는 사용할 수 없는 아이템입니다." << endl;
+                }
+            } else {
+                cout << "잘못된 번호입니다." << endl;
+            }
+        } else {
+            int beforeHp = monster.getHP();
+            player->attack(&monster);
+
+            cout << monster.getName() << " HP: " << beforeHp << " -> " << monster.getHP();
+            if (monster.getHP() <= 0) {
+                cout << " (사망)" << endl;
+                break;
+            }
+            cout << endl;
         }
-        cout << endl;
 
         cout << endl;
         cout << "--- 몬스터 턴 ---" << endl;
@@ -79,7 +139,9 @@ void battle(Player* player, Monster& monster, vector<Item>& inventory) {
             player->setMaxExp(player->getMaxExp() + 50);
 
             player->setHP(player->getHP() + 10);
+            player->setMaxHP(player->getMaxHP() + 10);
             player->setMp(player->getMp() + 5);
+            player->setMaxMP(player->getMaxMP() + 5);
             player->setPower(player->getPower() + 5);
 
             cout << "  -> 레벨 업! Lv." << oldLevel << " -> Lv." << player->getLevel() << endl;
@@ -216,6 +278,13 @@ int main() {
     vector<Item> inventory;
     const int INVENTORY_MAX = 10;
     AlchemyWorkshop workshop;
+
+    for (int i = 0; i < 3; i++) {
+        inventory.push_back({ "HP 포션", 50 });
+    }
+    for (int i = 0; i < 3; i++) {
+        inventory.push_back({ "MP 포션", 50 });
+    }
 
     bool isPlaying = true;
     while (isPlaying) {
